@@ -1,0 +1,28 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+app = FastAPI()
+
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://ram2635.github.io", "https://hylsmk-31-180-193-247.ru.tuna.am"],  # Разрешаем запросы с ваших доменов
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Определение модели данных
+class OnboardingData(BaseModel):
+    startupName: str
+    problemSolving: str
+
+@app.post("/submit_data")
+async def submit_data(data: OnboardingData):
+    print(f"Получены данные: Название стартапа - {data.startupName}, Проблема - {data.problemSolving}")
+    return {"status": "success", "received": data.dict()}
+
+@app.get("/")
+def read_root():
+    return {"message": "API для Mini App работает!"}

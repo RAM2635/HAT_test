@@ -1,3 +1,4 @@
+<!-- app/index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -9,8 +10,16 @@
 <body>
 <div class="container">
     <h1>Welcome to Startup Onboarding</h1>
-    <button onclick="startOnboarding()">Начать онбординг</button>
+    <form id="onboarding-form">
+        <label for="startup-name">Название стартапа:</label>
+        <input type="text" id="startup-name" name="startupName" required>
+
+        <label for="problem-solving">Какая проблема решается:</label>
+        <textarea id="problem-solving" name="problemSolving" required></textarea>
+
+        <button type="button" onclick="submitOnboarding()">Отправить</button>
+    </form>
 </div>
-<script src="telegram_mini_app_bot/app/app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
