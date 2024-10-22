@@ -1,3 +1,21 @@
+let TUNNEL_URL = "";
+
+// Функция для получения TUNNEL_URL с сервера
+function loadTunnelUrl() {
+    return fetch("/get_tunnel_url")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            TUNNEL_URL = data.tunnel_url;
+        })
+        .catch(error => console.error("Ошибка загрузки TUNNEL_URL:", error));
+}
+
+// Функция регистрации пользователя
 function registerUser() {
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
@@ -9,7 +27,7 @@ function registerUser() {
         password: password
     };
 
-    fetch("https://ваш_туннель.trycloudflare.com/register", {
+    fetch(`${TUNNEL_URL}/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -33,6 +51,7 @@ function registerUser() {
         .catch(error => console.error("Ошибка:", error));
 }
 
+// Функция отправки данных онбординга
 function submitOnboarding() {
     const startupNameValue = document.getElementById("startup-name").value;
     const problemSolvingValue = document.getElementById("problem-solving").value;
@@ -45,7 +64,7 @@ function submitOnboarding() {
     console.log("Данные формы:", formData);
 
     // Отправка данных на сервер через Cloudflare Tunnel
-    fetch("https://ваш_туннель.trycloudflare.com/submit_data", {
+    fetch(`${TUNNEL_URL}/submit_data`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -64,3 +83,10 @@ function submitOnboarding() {
         })
         .catch(error => console.error("Ошибка:", error));
 }
+
+// Загружаем URL туннеля перед началом работы
+window.onload = function () {
+    loadTunnelUrl().then(() => {
+        console.log("TUNNEL_URL загружен:", TUNNEL_URL);
+    });
+};

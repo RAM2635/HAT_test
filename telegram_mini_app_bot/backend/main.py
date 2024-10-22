@@ -1,7 +1,15 @@
+import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Загрузка переменных окружения из .env файла
+load_dotenv()
 
 app = FastAPI()
+
+# Получение URL туннеля из .env файла
+TUNNEL_URL = os.getenv("TUNNEL_URL")
 
 # Модель для данных пользователя
 class User(BaseModel):
@@ -23,8 +31,6 @@ async def register_user(user: User):
     }
     return {"message": "Регистрация успешна", "user": user.username}
 
-@app.post("/submit_data")
-async def submit_data(data: dict):
-    # Логика обработки данных стартапа
-    print(f"Получены данные: {data}")
-    return {"message": "Данные успешно получены", "data": data}
+@app.get("/get_tunnel_url")
+async def get_tunnel_url():
+    return {"tunnel_url": TUNNEL_URL}
