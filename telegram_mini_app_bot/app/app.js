@@ -25,6 +25,10 @@ function registerUser() {
         .then(data => {
             console.log("Пользователь зарегистрирован:", data);
             alert("Регистрация прошла успешно!");
+
+            // Показываем форму онбординга и скрываем форму регистрации
+            document.getElementById("registration-form").style.display = "none";
+            document.getElementById("onboarding-container").style.display = "block";
         })
         .catch(error => console.error("Ошибка:", error));
 }

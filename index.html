@@ -10,6 +10,7 @@
 <div class="container">
     <h1>Welcome to Startup Onboarding</h1>
 
+    <!-- Регистрация пользователя -->
     <h2>Регистрация пользователя</h2>
     <form id="registration-form">
         <label for="username">Имя пользователя:</label>
@@ -24,16 +25,19 @@
         <button type="button" onclick="registerUser()">Зарегистрироваться</button>
     </form>
 
-    <h2>Онбординг стартапа</h2>
-    <form id="onboarding-form">
-        <label for="startup-name">Название стартапа:</label>
-        <input type="text" id="startup-name" name="startupName" required>
+    <!-- Онбординг стартапа (по умолчанию скрыт) -->
+    <div id="onboarding-container" style="display:none;">
+        <h2>Онбординг стартапа</h2>
+        <form id="onboarding-form">
+            <label for="startup-name">Название стартапа:</label>
+            <input type="text" id="startup-name" name="startupName" required>
 
-        <label for="problem-solving">Какая проблема решается:</label>
-        <textarea id="problem-solving" name="problemSolving" required></textarea>
+            <label for="problem-solving">Какая проблема решается:</label>
+            <textarea id="problem-solving" name="problemSolving" required></textarea>
 
-        <button type="button" onclick="submitOnboarding()">Отправить</button>
-    </form>
+            <button type="button" onclick="submitOnboarding()">Отправить</button>
+        </form>
+    </div>
 </div>
 <script src="telegram_mini_app_bot/app/app.js"></script> <!-- Обновленный путь к JavaScript -->
 </body>
