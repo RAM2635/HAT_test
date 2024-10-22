@@ -1,25 +1,25 @@
-<!-- app/index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="app/styles.css"> <!-- Если styles.css есть в папке app -->
     <title>Startup Onboarding</title>
 </head>
 <body>
-<div class="container">
-    <h1>Welcome to Startup Onboarding</h1>
-    <form id="onboarding-form">
-        <label for="startup-name">Название стартапа:</label>
-        <input type="text" id="startup-name" name="startupName" required>
+    <div class="container">
+        <h1>Welcome to Startup Onboarding</h1>
+        <form id="onboarding-form">
+            <label for="startup-name">Название стартапа:</label>
+            <input type="text" id="startup-name" name="startupName" required>
 
-        <label for="problem-solving">Какая проблема решается:</label>
-        <textarea id="problem-solving" name="problemSolving" required></textarea>
+            <label for="problem-solving">Какая проблема решается:</label>
+            <textarea id="problem-solving" name="problemSolving" required></textarea>
 
-        <button type="button" onclick="submitOnboarding()">Отправить</button>
-    </form>
-</div>
-<script src="app.js"></script>
+            <button type="button" onclick="submitOnboarding()">Отправить</button>
+        </form>
+    </div>
+    <!-- Правильный путь к app.js -->
+    <script src="app/app.js"></script>
 </body>
 </html>
