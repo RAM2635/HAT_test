@@ -1,41 +1,30 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
 
-# Настройка CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://ram2635.github.io", "https://dramatically-therapeutic-academy-ef.trycloudflare.com"],  # Добавьте новый публичный URL,  # Разрешаем запросы с указанных доменов
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Модель для данных пользователя
+class User(BaseModel):
+    username: str
+    email: str
+    password: str
 
-# Определение модели данных
-class OnboardingData(BaseModel):
-    startupName: str
-    problemSolving: str
+# Словарь для хранения пользователей (вместо базы данных)
+users_db = {}
 
-# Обработчик для POST-запроса с данными
+@app.post("/register")
+async def register_user(user: User):
+    if user.email in users_db:
+        raise HTTPException(status_code=400, detail="Пользователь с таким email уже зарегистрирован")
+    # Сохраняем пользователя в "базе данных"
+    users_db[user.email] = {
+        "username": user.username,
+        "password": user.password  # Не рекомендуется хранить пароли в открытом виде!
+    }
+    return {"message": "Регистрация успешна", "user": user.username}
+
 @app.post("/submit_data")
-async def submit_data(request: Request):
-    try:
-        # Читаем входящие данные в сыром виде
-        data = await request.json()
-        print(f"Получены данные: {data}")
-
-        # Преобразуем в модель OnboardingData для валидации
-        onboarding_data = OnboardingData(**data)
-        print(f"Данные прошли валидацию: {onboarding_data}")
-
-        return {"status": "success", "received": onboarding_data.dict()}
-    except Exception as e:
-        print(f"Ошибка при валидации данных: {e}")
-        return {"status": "error", "message": str(e)}
-
-# Обработчик для GET-запроса на корневом уровне
-@app.get("/")
-def read_root():
-    return {"message": "API для Mini App работает!"}
+async def submit_data(data: dict):
+    # Логика обработки данных стартапа
+    print(f"Получены данные: {data}")
+    return {"message": "Данные успешно получены", "data": data}

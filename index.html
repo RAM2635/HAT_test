@@ -9,6 +9,22 @@
 <body>
 <div class="container">
     <h1>Welcome to Startup Onboarding</h1>
+
+    <h2>Регистрация пользователя</h2>
+    <form id="registration-form">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="button" onclick="registerUser()">Зарегистрироваться</button>
+    </form>
+
+    <h2>Онбординг стартапа</h2>
     <form id="onboarding-form">
         <label for="startup-name">Название стартапа:</label>
         <input type="text" id="startup-name" name="startupName" required>
