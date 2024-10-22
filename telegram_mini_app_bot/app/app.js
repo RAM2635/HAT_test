@@ -1,25 +1,17 @@
 // app/app.js
 function submitOnboarding() {
-    // Получаем данные из полей формы по их идентификаторам
-    const startupNameValue = document.getElementById("startup-name").value;
-    const problemSolvingValue = document.getElementById("problem-solving").value;
-
-    // Формируем объект данных
     const formData = {
-        startupName: startupNameValue,
-        problemSolving: problemSolvingValue
+        startupName: document.getElementById("startup-name").value,
+        problemSolving: document.getElementById("problem-solving").value
     };
 
-    // Проверяем, что данные захватываются корректно
-    console.log("Данные формы:", formData);
-
-    // Отправляем POST-запрос на сервер через публичный URL, предоставленный Tuna
-    fetch("https://hylsmk-31-180-193-247.ru.tuna.am/submit_data", {
+    // Используем публичный URL от Cloudflare Tunnel
+    fetch("https://dramatically-therapeutic-academy-ef.trycloudflare.com/submit_data", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(formData)  // Преобразуем объект в JSON перед отправкой
+        body: JSON.stringify(formData)
     })
         .then(response => {
             if (!response.ok) {

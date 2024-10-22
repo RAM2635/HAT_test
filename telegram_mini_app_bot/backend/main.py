@@ -7,7 +7,7 @@ app = FastAPI()
 # Настройка CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ram2635.github.io", "https://hylsmk-31-180-193-247.ru.tuna.am"],  # Разрешаем запросы с указанных доменов
+    allow_origins=["https://ram2635.github.io", "https://dramatically-therapeutic-academy-ef.trycloudflare.com"],  # Добавьте новый публичный URL,  # Разрешаем запросы с указанных доменов
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
