@@ -1,7 +1,6 @@
-# telegram_mini_app_bot/bot/bot.py
-
 import os
 import asyncio
+import logging
 from aiogram import Bot, Dispatcher, Router
 from aiogram.types import Message
 from aiogram.filters import Command
@@ -19,8 +18,16 @@ if not TOKEN:
 if not TUNNEL_URL:
     raise ValueError("TUNNEL_URL не установлен. Проверьте файл .env.")
 
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
+
 # Создаем объект бота
-bot = Bot(token=TOKEN)
+try:
+    bot = Bot(token=TOKEN)
+except Exception as e:
+    logging.error(f"Ошибка при создании бота: {e}")
+    raise
+
 dp = Dispatcher()
 
 # Создаем маршрутизатор и регистрируем обработчики
@@ -51,7 +58,7 @@ async def send_welcome(message: Message):
                 else:
                     await message.answer("Ваша роль не найдена. Пожалуйста, свяжитесь с поддержкой.")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logging.error(f"An error occurred: {e}")
             await message.answer(f"Произошла ошибка: {e}")
 
 # Включаем маршрутизатор в диспетчер
@@ -59,8 +66,11 @@ dp.include_router(router)
 
 async def main():
     # Настройка и запуск бота
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+    try:
+        await bot.delete_webhook(drop_pending_updates=True)
+        await dp.start_polling(bot)
+    except Exception as e:
+        logging.error(f"Ошибка при запуске бота: {e}")
 
 if __name__ == "__main__":
     # Используем asyncio для запуска

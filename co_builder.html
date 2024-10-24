@@ -5,21 +5,28 @@
     <meta charset="UTF-8">
     <title>Hi Co-builder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join the HAT platform as a co-builder and start your journey.">
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/static/styles.css">
     <!-- Favicon -->
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
-<div class="container">
+<header>
     <h1>Hi Co-builder</h1>
+</header>
+<main class="container">
     <p>Welcome to the project! Your journey as a co-builder begins here.</p>
-</div>
-<div class="footer">
+</main>
+<footer class="footer">
     &copy; 2023 HAT Platform. All rights reserved.
-</div>
+</footer>
 <script>
     const TUNNEL_URL = "{{ TUNNEL_URL }}";
+    if (!TUNNEL_URL) {
+        console.error("TUNNEL_URL is not defined.");
+        alert("Internal error. Please try again later.");
+    }
 </script>
 <script src="/static/app.js"></script>
 </body>

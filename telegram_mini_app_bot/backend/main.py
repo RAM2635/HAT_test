@@ -1,7 +1,6 @@
-# backend/main.py
-
 import os
 import traceback
+import logging
 
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, HTTPException, Depends, Request
@@ -25,6 +24,9 @@ if not DATABASE_URL:
 TUNNEL_URL = os.getenv("TUNNEL_URL")
 if not TUNNEL_URL:
     raise ValueError("TUNNEL_URL не установлен. Проверьте файл .env.")
+
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
@@ -77,10 +79,14 @@ class SignInData(BaseModel):
 async def register_user(user: User):
     async with async_session() as session:
         async with session.begin():
-            # Проверка, зарегистрирован ли пользователь по tg_id
-            existing_user = await session.execute(select(users_table).where(users_table.c.tg_id == user.tg_id))
-            if existing_user.scalar():
+            # Проверка на существование пользователя по tg_id и email
+            existing_user_by_tg_id = await session.execute(select(users_table).where(users_table.c.tg_id == user.tg_id))
+            if existing_user_by_tg_id.scalar():
                 raise HTTPException(status_code=400, detail="User with this tg_id is already registered")
+
+            existing_user_by_email = await session.execute(select(users_table).where(users_table.c.email == user.email))
+            if existing_user_by_email.scalar():
+                raise HTTPException(status_code=400, detail="User with this email is already registered")
 
             # Вставка нового пользователя
             new_user = users_table.insert().values(
@@ -98,7 +104,7 @@ async def register_user(user: User):
 # Эндпоинт для входа пользователя по tg_id
 @app.post("/sign_in")
 async def sign_in_user(sign_in_data: SignInData):
-    print(f"Received sign_in request with tg_id: {sign_in_data.tg_id}")
+    logging.info(f"Received sign_in request with tg_id: {sign_in_data.tg_id}")
     try:
         async with async_session() as session:
             async with session.begin():
@@ -108,13 +114,13 @@ async def sign_in_user(sign_in_data: SignInData):
                 user = result.fetchone()
 
                 if not user:
-                    print("User not found")
+                    logging.warning("User not found")
                     raise HTTPException(status_code=404, detail="User not found")
 
-                print(f"User found: tg_id={user.tg_id}, role={user.role}")
+                logging.info(f"User found: tg_id={user.tg_id}, role={user.role}")
                 return {"tg_id": user.tg_id, "role": user.role}
     except Exception as e:
-        print(f"An error occurred: {e}")
+        logging.error(f"An error occurred during sign in: {e}")
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal server error")
 
@@ -145,7 +151,7 @@ async def ping():
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    print(f"Unhandled exception: {exc}")
+    logging.error(f"Unhandled exception: {exc}")
     traceback.print_exc()
     return JSONResponse(
         status_code=500,

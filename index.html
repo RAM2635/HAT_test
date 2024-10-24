@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Welcome to HAT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join the HAT platform to connect with innovative startups as a co-builder or founder.">
     <!-- Telegram Web Apps SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Stylesheet -->
@@ -13,8 +14,10 @@
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
-<div class="container">
+<header>
     <h1>Welcome to HAT</h1>
+</header>
+<main class="container">
     <p>If you are a co-builder, your journey to join innovative startups begins here. Whether you're a developer,
         marketer, designer, or strategist, our platform connects you with exciting projects tailored to your expertise.
         Let’s get started and find your next big challenge.</p>
@@ -23,15 +26,20 @@
         now!</p>
 
     <div class="button-group">
-        <button onclick="location.href='/login'">Sign in</button>
-        <button onclick="location.href='/registration'">Registration</button>
+        <button onclick="location.href='/login'" aria-label="Sign in">Sign in</button>
+        <button onclick="location.href='/registration'" aria-label="Register">Registration</button>
     </div>
-</div>
-<div class="footer">
+</main>
+<footer class="footer">
     &copy; 2023 HAT Platform. All rights reserved.
-</div>
+</footer>
 <script>
     const TUNNEL_URL = "{{ TUNNEL_URL }}";
+
+    if (!TUNNEL_URL) {
+        console.error("TUNNEL_URL is not defined.");
+        alert("Internal error. Please try again later.");
+    }
 </script>
 <script src="/static/app.js"></script>
 </body>

@@ -3,30 +3,44 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
+/* CSS Variables for easy customization */
+:root {
+    --main-bg-color: #f0f2f5;
+    --header-bg-color: #fff;
+    --button-bg-color: #1877f2;
+    --button-hover-bg-color: #165fbb;
+    --telegram-button-bg-color: #0088cc;
+    --telegram-button-hover-bg-color: #006f9a;
+    --text-color: #1c1e21;
+    --label-color: #606770;
+    --placeholder-color: #a0a0a0;
+    --footer-text-color: #65676b;
+}
+
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f0f2f5;
-    color: #1c1e21;
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
 }
 
 .header {
-    background-color: #fff;
+    background-color: var(--header-bg-color);
     padding: 20px 0;
     text-align: center;
     border-bottom: 1px solid #e0e0e0;
 }
 
 .header h1 {
-    color: #1c1e21;
+    color: var(--text-color);
     margin: 0;
     font-size: 28px;
     font-weight: 600;
 }
 
 .container {
-    background-color: #fff;
+    background-color: var(--header-bg-color);
     padding: 40px;
     border-radius: 8px;
     max-width: 400px;
@@ -36,7 +50,7 @@ body {
 
 .container h2 {
     font-size: 24px;
-    color: #1c1e21;
+    color: var(--text-color);
     margin-bottom: 30px;
     text-align: center;
     font-weight: 600;
@@ -49,7 +63,7 @@ body {
 .form-group label {
     display: block;
     font-size: 14px;
-    color: #606770;
+    color: var(--label-color);
     margin-bottom: 5px;
 }
 
@@ -60,25 +74,25 @@ body {
     border: 1px solid #ccd0d5;
     border-radius: 6px;
     font-size: 16px;
-    color: #1c1e21;
+    color: var(--text-color);
     background-color: #f5f6f7;
 }
 
 .form-group input::placeholder {
-    color: #a0a0a0;
+    color: var(--placeholder-color);
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #1877f2;
-    outline: none;
-    background-color: #fff;
+    border-color: var(--button-bg-color);
+    outline: none; /* Consider adding a focus style */
+    background-color: #fff; /* Optional */
 }
 
 button {
     width: 100%;
     padding: 14px 0;
-    background-color: #1877f2;
+    background-color: var(--button-bg-color);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -86,20 +100,19 @@ button {
     font-size: 18px;
     font-weight: 600;
     margin-top: 10px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for hover effect */
 }
 
 button:hover {
-    background-color: #165fbb;
+    background-color: var(--button-hover-bg-color);
 }
 
 .telegram-button {
-    background-color: #0088cc;
-    margin-top: 30px;
+    background-color: var(--telegram-button-bg-color);
 }
 
 .telegram-button:hover {
-    background-color: #006f9a;
+    background-color: var(--telegram-button-hover-bg-color);
 }
 
 .alternate-option {
@@ -109,36 +122,18 @@ button:hover {
 }
 
 .alternate-option a {
-    color: #1877f2;
+    color: var(--button-bg-color);
     text-decoration: none;
 }
 
 .alternate-option a:hover {
-    text-decoration: underline;
+   text-decoration: underline;
 }
 
 .button-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
+   display:flex;
+   justify-content:center;
+   gap :15px;
 }
 
-.button-group button {
-    width: 100%;
-}
-
-.footer {
-    text-align: center;
-    padding: 20px 0;
-    color: #65676b;
-    font-size: 12px;
-}
-
-.footer a {
-    color: #1877f2;
-    text-decoration: none;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
+.button-group button
