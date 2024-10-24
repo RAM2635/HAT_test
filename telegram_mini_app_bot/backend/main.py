@@ -36,7 +36,6 @@ users_table = Table(
 )
 
 
-
 # Модель данных для регистрации пользователя
 class User(BaseModel):
     tg_id: int
