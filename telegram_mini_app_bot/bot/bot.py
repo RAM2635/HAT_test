@@ -4,12 +4,14 @@ from aiogram import Bot, Dispatcher, Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from dotenv import load_dotenv
+import requests
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
 # Установка токена для бота из переменной окружения
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TUNNEL_URL = os.getenv("TUNNEL_URL")
 if not TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN не установлен. Проверьте файл .env.")
 
@@ -20,23 +22,34 @@ dp = Dispatcher()
 # Создаем маршрутизатор и регистрируем обработчики
 router = Router()
 
-
 @router.message(Command(commands=['start']))
 async def send_welcome(message: Message):
-    # Отправка ссылки на Mini App, размещенную на GitHub Pages
-    await message.answer(
-        "Добро пожаловать! Перейдите по ссылке, чтобы начать онбординг: https://ram2635.github.io/HAT_test/")
+    tg_id = message.from_user.id
 
+    # Отправляем запрос на сервер для проверки роли пользователя
+    response = requests.post(f"{TUNNEL_URL}/sign_in", json={"tg_id": tg_id})
+
+    if response.status_code != 200:
+        await message.answer("Ошибка входа. Пожалуйста, попробуйте позже.")
+        return
+
+    data = response.json()
+    role = data.get("role")
+
+    if role == "co_builder":
+        await message.answer("Hi Co-builder! Перейдите по ссылке для продолжения: https://ram2635.github.io/HAT_test/co_builder.html")
+    elif role == "founder":
+        await message.answer("Hi Founder! Перейдите по ссылке для продолжения: https://ram2635.github.io/HAT_test/founder.html")
+    else:
+        await message.answer("Ваша роль не найдена. Пожалуйста, свяжитесь с поддержкой.")
 
 # Включаем маршрутизатор в диспетчер
 dp.include_router(router)
-
 
 async def main():
     # Настройка и запуск бота
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
-
 
 if __name__ == "__main__":
     # Используем asyncio для запуска
