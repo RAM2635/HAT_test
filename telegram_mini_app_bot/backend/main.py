@@ -1,12 +1,12 @@
 import os
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData
 from dotenv import load_dotenv
 
-# Загрузка переменных окружения из .env файла
+# Загрузка переменных окружения из файла .env
 load_dotenv()
 
 # Подключение к базе данных через SQLAlchemy
@@ -34,7 +34,6 @@ users_table = Table(
     Column("startup", String)
 )
 
-
 # Модель данных для регистрации пользователя
 class User(BaseModel):
     tg_id: int
@@ -43,11 +42,9 @@ class User(BaseModel):
     last_name: str
     role: str
 
-
 # Модель данных для входа по tg_id
 class SignInData(BaseModel):
     tg_id: int
-
 
 # Эндпоинт для регистрации нового пользователя
 @app.post("/register")
@@ -71,7 +68,6 @@ async def register_user(user: User):
             await session.commit()
 
     return {"message": "Registration successful", "user": user.first_name}
-
 
 # Эндпоинт для входа пользователя по tg_id
 @app.post("/sign_in")
