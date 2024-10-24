@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="telegram_mini_app_bot/app/styles.css">
+    <title>Registration</title>
+</head>
+<body>
+<div class="container">
+    <h1>Registration</h1>
+    <form id="registration-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="first-name">First Name:</label>
+        <input type="text" id="first-name" name="first_name" required>
+
+        <label for="last-name">Last Name:</label>
+        <input type="text" id="last-name" name="last_name" required>
+
+        <label for="role">Role on the platform:</label>
+        <select id="role" name="role" required>
+            <option value="co_builder">Co-builder</option>
+            <option value="founder">Founder</option>
+        </select>
+
+        <button type="button" onclick="registerUser()">Register</button>
+    </form>
+</div>
+<script src="telegram_mini_app_bot/app/app.js"></script>
+</body>
+</html>

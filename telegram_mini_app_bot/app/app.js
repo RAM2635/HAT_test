@@ -5,26 +5,28 @@ function loadTunnelUrl() {
     return fetch("/get_tunnel_url")
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Ошибка HTTP: ${response.status}`);
+                throw new Error(`HTTP Error: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
             TUNNEL_URL = data.tunnel_url;
         })
-        .catch(error => console.error("Ошибка загрузки TUNNEL_URL:", error));
+        .catch(error => console.error("Error loading TUNNEL_URL:", error));
 }
 
-// Функция регистрации пользователя
+// Функция для регистрации пользователя
 function registerUser() {
-    const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const firstName = document.getElementById("first-name").value;
+    const lastName = document.getElementById("last-name").value;
+    const role = document.getElementById("role").value;
 
     const registrationData = {
-        username: username,
         email: email,
-        password: password
+        first_name: firstName,
+        last_name: lastName,
+        role: role
     };
 
     fetch(`${TUNNEL_URL}/register`, {
@@ -36,57 +38,27 @@ function registerUser() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Ошибка HTTP: ${response.status}`);
+                throw new Error(`HTTP Error: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log("Пользователь зарегистрирован:", data);
-            alert("Регистрация прошла успешно!");
+            console.log("User registered:", data);
+            alert("Registration successful!");
 
-            // Показываем форму онбординга и скрываем форму регистрации
-            document.getElementById("registration-form").style.display = "none";
-            document.getElementById("onboarding-container").style.display = "block";
-        })
-        .catch(error => console.error("Ошибка:", error));
-}
-
-// Функция отправки данных онбординга
-function submitOnboarding() {
-    const startupNameValue = document.getElementById("startup-name").value;
-    const problemSolvingValue = document.getElementById("problem-solving").value;
-
-    const formData = {
-        startupName: startupNameValue,
-        problemSolving: problemSolvingValue
-    };
-
-    console.log("Данные формы:", formData);
-
-    // Отправка данных на сервер через Cloudflare Tunnel
-    fetch(`${TUNNEL_URL}/submit_data`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Ошибка HTTP: ${response.status}`);
+            // Переход на страницу в зависимости от роли пользователя
+            if (role === "co_builder") {
+                location.href = "co_builder.html";
+            } else {
+                location.href = "founder.html";
             }
-            return response.json();
         })
-        .then(data => {
-            console.log("Ответ от backend:", data);
-            alert("Данные успешно отправлены!");
-        })
-        .catch(error => console.error("Ошибка:", error));
+        .catch(error => console.error("Error:", error));
 }
 
 // Загружаем URL туннеля перед началом работы
 window.onload = function () {
     loadTunnelUrl().then(() => {
-        console.log("TUNNEL_URL загружен:", TUNNEL_URL);
+        console.log("TUNNEL_URL loaded:", TUNNEL_URL);
     });
 };

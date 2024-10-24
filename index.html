@@ -1,44 +1,21 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="telegram_mini_app_bot/app/styles.css"> <!-- Обновленный путь к файлу стилей -->
-    <title>Startup Onboarding</title>
+    <link rel="stylesheet" href="telegram_mini_app_bot/app/styles.css">
+    <title>Welcome to HAT</title>
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to Startup Onboarding</h1>
+    <h1>Welcome to HAT</h1>
+    <p>If you co-builder, your journey to join innovative startups begins here. Whether you're a developer, marketer, designer, or strategist, our platform connects you with exciting projects tailored to your expertise. Let’s get started and find your next big challenge.</p>
+    <p>If you are a founder, your path to your own startup starts here. If you have an idea for your own startup, regardless of the stage of implementation, our platform will help bring it to life. Start your path to success now!</p>
 
-    <!-- Регистрация пользователя -->
-    <h2>Регистрация пользователя</h2>
-    <form id="registration-form">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" required>
-
-        <button type="button" onclick="registerUser()">Зарегистрироваться</button>
-    </form>
-
-    <!-- Онбординг стартапа (по умолчанию скрыт) -->
-    <div id="onboarding-container" style="display:none;">
-        <h2>Онбординг стартапа</h2>
-        <form id="onboarding-form">
-            <label for="startup-name">Название стартапа:</label>
-            <input type="text" id="startup-name" name="startupName" required>
-
-            <label for="problem-solving">Какая проблема решается:</label>
-            <textarea id="problem-solving" name="problemSolving" required></textarea>
-
-            <button type="button" onclick="submitOnboarding()">Отправить</button>
-        </form>
+    <div class="button-group">
+        <button onclick="location.href='login.html'">Sign in</button>
+        <button onclick="location.href='registration.html'">Registration</button>
     </div>
 </div>
-<script src="telegram_mini_app_bot/app/app.js"></script> <!-- Обновленный путь к JavaScript -->
 </body>
 </html>
