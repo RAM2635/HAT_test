@@ -3,12 +3,11 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String, Table, MetaData
+from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData
 from dotenv import load_dotenv
 
 # Загрузка переменных окружения из .env файла
 load_dotenv()
-
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_async_engine(DATABASE_URL, echo=True)
@@ -22,7 +21,7 @@ metadata = MetaData()
 users_table = Table(
     "users",
     metadata,
-    Column("tg_id", Integer, primary_key=True),
+    Column("tg_id", BigInteger, primary_key=True),
     Column("first_name", String),
     Column("last_name", String),
     Column("email", String, unique=True),

@@ -56,6 +56,37 @@ function registerUser() {
         .catch(error => console.error("Error:", error));
 }
 
+// Функция для входа пользователя
+function signInUser() {
+    const email = document.getElementById("email").value;
+
+    fetch(`${TUNNEL_URL}/sign_in`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: email })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("User signed in:", data);
+            alert("Sign in successful!");
+
+            // Переход на страницу в зависимости от роли пользователя
+            if (data.role === "co_builder") {
+                location.href = "co_builder.html";
+            } else {
+                location.href = "founder.html";
+            }
+        })
+        .catch(error => console.error("Error:", error));
+}
+
 // Загружаем URL туннеля перед началом работы
 window.onload = function () {
     loadTunnelUrl().then(() => {
