@@ -29,13 +29,13 @@
                 let start = 0;
                 while (start < message.length) {
                     const part = message.substring(start, start + MAX_LENGTH);
+                    console.log(`Sending message part of length ${part.length}`);
                     start += MAX_LENGTH;
                     // Send each part of the message separately
-                    console.log("Sending message part:", part);
                     await sendPart(part);
                 }
             } else {
-                console.log("Sending message:", message);
+                console.log(`Sending message of length ${message.length}`);
                 await sendPart(message);
             }
         } catch (error) {
@@ -47,6 +47,9 @@
     // Send the message part with additional error handling
     async function sendPart(part) {
         try {
+            if (part.length > 4096) {
+                throw new Error('Message part exceeds the allowed length of 4096 characters');
+            }
             // Replace this with the actual sending logic, e.g., using an API call
             await fetch(TUNNEL_URL + '/send_message', {
                 method: 'POST',
@@ -58,7 +61,7 @@
                 if (!response.ok) {
                     throw new Error('Failed to send message part');
                 }
-                console.log("Message part sent:", part);
+                console.log("Message part sent successfully:", part);
             });
         } catch (error) {
             console.error("Error sending message part:", error);
