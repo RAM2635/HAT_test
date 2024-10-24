@@ -20,6 +20,39 @@
 </div>
 <script>
     const TUNNEL_URL = "{{ TUNNEL_URL }}";
+
+    // Ensure the message length does not exceed the Telegram limit
+    async function sendMessage(message) {
+        const MAX_LENGTH = 4096;
+        try {
+            if (message.length > MAX_LENGTH) {
+                let start = 0;
+                while (start < message.length) {
+                    const part = message.substring(start, start + MAX_LENGTH);
+                    start += MAX_LENGTH;
+                    // Send each part of the message separately
+                    console.log("Sending message part:", part);
+                    await sendPart(part);
+                }
+            } else {
+                console.log("Sending message:", message);
+                await sendPart(message);
+            }
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
+    }
+
+    // Simulate sending a message part
+    async function sendPart(part) {
+        // Replace this with the actual sending logic, e.g., using an API call
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                console.log("Message part sent:", part);
+                resolve();
+            }, 100);
+        });
+    }
 </script>
 <script src="/static/app.js"></script>
 </body>
