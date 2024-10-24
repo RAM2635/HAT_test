@@ -78,6 +78,7 @@ async def register_user(user: User):
 async def sign_in_user(sign_in_data: SignInData):
     async with async_session() as session:
         async with session.begin():
+            # Проверка пользователя по tg_id
             query = users_table.select().where(users_table.c.tg_id == sign_in_data.tg_id)
             result = await session.execute(query)
             user = result.fetchone()
@@ -86,4 +87,3 @@ async def sign_in_user(sign_in_data: SignInData):
                 raise HTTPException(status_code=404, detail="User not found")
 
             return {"tg_id": user.tg_id, "role": user.role}
-
