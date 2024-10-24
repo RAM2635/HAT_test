@@ -20,8 +20,11 @@ function signInUser() {
         body: JSON.stringify({tg_id: tg_id})
     })
         .then(response => {
+            console.log("Response status:", response.status);
             if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
+                return response.json().then(errData => {
+                    throw new Error(`${response.status}: ${errData.detail}`);
+                });
             }
             return response.json();
         })
@@ -38,8 +41,12 @@ function signInUser() {
                 alert("Role not found");
             }
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => {
+            console.error("Error:", error);
+            alert(`An error occurred: ${error.message}`);
+        });
 }
+
 
 // Function to register a new user
 function registerUser() {
