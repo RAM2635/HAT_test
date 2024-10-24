@@ -45,7 +45,7 @@ function signInUser() {
 function registerUser() {
     const tg = window.Telegram.WebApp;
     const tgUser = tg.initDataUnsafe.user;
-
+    console.log("Telegram User:", tgUser);
     if (!tgUser) {
         alert('Please open this page in Telegram Mini App.');
         return;
@@ -90,4 +90,5 @@ function registerUser() {
             }
         })
         .catch(error => console.error("Error:", error));
+    alert(`An error occurred: ${error.message}`);
 }

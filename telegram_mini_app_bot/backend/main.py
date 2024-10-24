@@ -86,16 +86,18 @@ async def register_user(user: User):
 # Эндпоинт для входа пользователя по tg_id
 @app.post("/sign_in")
 async def sign_in_user(sign_in_data: SignInData):
+    print(f"Received sign_in request with tg_id: {sign_in_data.tg_id}")
     async with async_session() as session:
         async with session.begin():
-            # Проверка пользователя по tg_id
             query = users_table.select().where(users_table.c.tg_id == sign_in_data.tg_id)
             result = await session.execute(query)
             user = result.fetchone()
 
             if not user:
+                print("User not found")
                 raise HTTPException(status_code=404, detail="User not found")
 
+            print(f"User found: tg_id={user.tg_id}, role={user.role}")
             return {"tg_id": user.tg_id, "role": user.role}
 
 # Маршруты для HTML-страниц
