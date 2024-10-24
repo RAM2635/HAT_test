@@ -85,10 +85,11 @@ async def send_message(chat_id: int, message: str):
         for i in range(0, len(message), MAX_LENGTH):
             part = message[i:i + MAX_LENGTH]
             # Здесь добавьте логику для отправки каждой части сообщения через Telegram API.
-            # Например:
-            # await bot.send_message(chat_id=chat_id, text=part)
             logging.info(f"Sending part of the message to {chat_id}: {part}")
-            # Вставьте реальную логику отправки сообщения
+            # await bot.send_message(chat_id=chat_id, text=part)  # Реальная логика отправки сообщения
+    else:
+        logging.info(f"Sending message to {chat_id}: {message}")
+        # await bot.send_message(chat_id=chat_id, text=message)  # Реальная логика отправки сообщения
 
 
 # Эндпоинт для регистрации нового пользователя
@@ -96,7 +97,6 @@ async def send_message(chat_id: int, message: str):
 async def register_user(user: User):
     async with async_session() as session:
         async with session.begin():
-            # Проверка на существование пользователя по tg_id и email
             existing_user_by_tg_id = await session.execute(select(users_table).where(users_table.c.tg_id == user.tg_id))
             if existing_user_by_tg_id.scalar():
                 raise HTTPException(status_code=400, detail="User with this tg_id is already registered")
@@ -105,7 +105,6 @@ async def register_user(user: User):
             if existing_user_by_email.scalar():
                 raise HTTPException(status_code=400, detail="User with this email is already registered")
 
-            # Вставка нового пользователя
             new_user = users_table.insert().values(
                 tg_id=user.tg_id,
                 first_name=user.first_name,
@@ -127,7 +126,6 @@ async def sign_in_user(sign_in_data: SignInData):
     try:
         async with async_session() as session:
             async with session.begin():
-                # Проверка пользователя по tg_id
                 query = select(users_table).where(users_table.c.tg_id == sign_in_data.tg_id)
                 result = await session.execute(query)
                 user = result.fetchone()
@@ -138,7 +136,6 @@ async def sign_in_user(sign_in_data: SignInData):
 
                 logging.info(f"User found: tg_id={user.tg_id}, role={user.role}")
 
-                # Здесь вы можете отправить сообщение пользователю о том, что он вошел в систему.
                 await send_message(user.tg_id, "Welcome back!")  # Пример использования функции send_message
 
                 return {"tg_id": user.tg_id, "role": user.role}
@@ -148,7 +145,8 @@ async def sign_in_user(sign_in_data: SignInData):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-# Маршруты для HTML-страниц
+# Остальные маршруты остаются без изменений...
+
 @app.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
@@ -184,14 +182,12 @@ async def global_exception_handler(request: Request, exc: Exception):
     logging.error(f"Unhandled exception: {exc}")
     traceback.print_exc()
 
-    # Возвращаем стандартный ответ об ошибке с сообщением и статусом 500
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"},
     )
 
 
-# Добавление обработчиков ошибок для конкретных исключений (например, валидация)
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     logging.error(f"HTTP exception occurred: {exc.detail}")
