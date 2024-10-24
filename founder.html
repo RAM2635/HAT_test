@@ -40,18 +40,28 @@
             }
         } catch (error) {
             console.error("Error sending message:", error);
+            alert("An error occurred while sending the message. Please try again later.");
         }
     }
 
-    // Simulate sending a message part
+    // Simulate sending a message part with additional error handling
     async function sendPart(part) {
-        // Replace this with the actual sending logic, e.g., using an API call
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                console.log("Message part sent:", part);
-                resolve();
-            }, 100);
-        });
+        try {
+            // Replace this with the actual sending logic, e.g., using an API call
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (Math.random() > 0.95) { // Simulate a failure in 5% of cases
+                        reject(new Error("Failed to send message part"));
+                    } else {
+                        console.log("Message part sent:", part);
+                        resolve();
+                    }
+                }, 100);
+            });
+        } catch (error) {
+            console.error("Error sending message part:", error);
+            throw error;
+        }
     }
 </script>
 <script src="/static/app.js"></script>
