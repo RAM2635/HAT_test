@@ -1,15 +1,26 @@
+<!-- templates/co_builder.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="telegram_mini_app_bot/app/styles.css">
     <title>Hi Co-builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Favicon -->
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <div class="container">
     <h1>Hi Co-builder</h1>
     <p>Welcome to the project! Your journey as a co-builder begins here.</p>
 </div>
+<div class="footer">
+    &copy; 2023 HAT Platform. All rights reserved.
+</div>
+<script>
+    const TUNNEL_URL = "{{ TUNNEL_URL }}";
+</script>
+<script src="/static/app.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData
+from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData, select
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -38,7 +38,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Подключение статических файлов
 app.mount("/static", StaticFiles(directory="telegram_mini_app_bot/app"), name="static")
@@ -79,7 +78,7 @@ async def register_user(user: User):
     async with async_session() as session:
         async with session.begin():
             # Проверка, зарегистрирован ли пользователь по tg_id
-            existing_user = await session.execute(users_table.select().where(users_table.c.tg_id == user.tg_id))
+            existing_user = await session.execute(select(users_table).where(users_table.c.tg_id == user.tg_id))
             if existing_user.scalar():
                 raise HTTPException(status_code=400, detail="User with this tg_id is already registered")
 
@@ -104,7 +103,7 @@ async def sign_in_user(sign_in_data: SignInData):
         async with async_session() as session:
             async with session.begin():
                 # Проверка пользователя по tg_id
-                query = users_table.select().where(users_table.c.tg_id == sign_in_data.tg_id)
+                query = select(users_table).where(users_table.c.tg_id == sign_in_data.tg_id)
                 result = await session.execute(query)
                 user = result.fetchone()
 
@@ -143,7 +142,6 @@ async def founder(request: Request):
 @app.get("/ping")
 async def ping():
     return {"message": "pong"}
-
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):

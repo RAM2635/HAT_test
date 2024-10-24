@@ -4,8 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to HAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Telegram Web Apps SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="/static/styles.css">
+    <!-- Favicon -->
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <div class="container">
@@ -21,6 +26,9 @@
         <button onclick="location.href='/login'">Sign in</button>
         <button onclick="location.href='/registration'">Registration</button>
     </div>
+</div>
+<div class="footer">
+    &copy; 2023 HAT Platform. All rights reserved.
 </div>
 <script>
     const TUNNEL_URL = "{{ TUNNEL_URL }}";

@@ -11,13 +11,20 @@ function signInUser() {
     }
 
     const tg_id = tgUser.id;
+    const TUNNEL_URL = window.TUNNEL_URL;
+
+    if (!TUNNEL_URL) {
+        console.error("TUNNEL_URL is not defined.");
+        alert("Internal error. Please try again later.");
+        return;
+    }
 
     fetch(`${TUNNEL_URL}/sign_in`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({tg_id: tg_id})
+        body: JSON.stringify({ tg_id: tg_id })
     })
         .then(response => {
             console.log("Response status:", response.status);
@@ -47,7 +54,6 @@ function signInUser() {
         });
 }
 
-
 // Function to register a new user
 function registerUser() {
     const tg = window.Telegram.WebApp;
@@ -63,6 +69,13 @@ function registerUser() {
     const last_name = document.getElementById('last-name').value;
     const email = document.getElementById('email').value;
     const role = document.getElementById('role').value;
+    const TUNNEL_URL = window.TUNNEL_URL;
+
+    if (!TUNNEL_URL) {
+        console.error("TUNNEL_URL is not defined.");
+        alert("Internal error. Please try again later.");
+        return;
+    }
 
     fetch(`${TUNNEL_URL}/register`, {
         method: "POST",
@@ -79,7 +92,9 @@ function registerUser() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
+                return response.json().then(errData => {
+                    throw new Error(`${response.status}: ${errData.detail}`);
+                });
             }
             return response.json();
         })
@@ -96,6 +111,13 @@ function registerUser() {
                 alert("Role not found");
             }
         })
-        .catch(error => console.error("Error:", error));
-    alert(`An error occurred: ${error.message}`);
+        .catch(error => {
+            console.error("Error:", error);
+            alert(`An error occurred: ${error.message}`);
+        });
 }
+
+// Adding TUNNEL_URL to global scope for use in other scripts
+document.addEventListener("DOMContentLoaded", () => {
+    window.TUNNEL_URL = "{{ TUNNEL_URL }}";
+});
