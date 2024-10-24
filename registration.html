@@ -3,20 +3,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Registration - HAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Telegram Web Apps SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="/static/styles.css">
+    <!-- Favicon -->
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <div class="header">
-    <h1>Welcome to HAT</h1>
+    <h1>HAT Platform</h1>
 </div>
 <div class="container">
-    <h2>Create Your Account</h2>
+    <h2>Create an Account</h2>
     <form id="registration-form">
         <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            <input type="email" id="email" name="email" placeholder="e.g., yourname@example.com" required>
         </div>
 
         <div class="form-group">
@@ -41,6 +46,9 @@
         <button type="button" onclick="registerUser()">Register</button>
     </form>
     <p class="alternate-option">Already have an account? <a href="/login">Sign In</a></p>
+</div>
+<div class="footer">
+    &copy; 2023 HAT Platform. All rights reserved.
 </div>
 <script>
     const TUNNEL_URL = "{{ TUNNEL_URL }}";
