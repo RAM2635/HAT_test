@@ -139,7 +139,6 @@ async def sign_in_user(sign_in_data: SignInData):
                 logging.info(f"User found: tg_id={user.tg_id}, role={user.role}")
 
                 # Здесь вы можете отправить сообщение пользователю о том, что он вошел в систему.
-                # Например:
                 await send_message(user.tg_id, "Welcome back!")  # Пример использования функции send_message
 
                 return {"tg_id": user.tg_id, "role": user.role}
@@ -148,4 +147,56 @@ async def sign_in_user(sign_in_data: SignInData):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal server error")
 
-# Остальные маршруты остаются без изменений...
+
+# Маршруты для HTML-страниц
+@app.get("/login")
+async def login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
+
+
+@app.get("/registration")
+async def registration(request: Request):
+    return templates.TemplateResponse("registration.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
+
+
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
+
+
+@app.get("/co_builder")
+async def co_builder(request: Request):
+    return templates.TemplateResponse("co_builder.html", {"request": request})
+
+
+@app.get("/founder")
+async def founder(request: Request):
+    return templates.TemplateResponse("founder.html", {"request": request})
+
+
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logging.error(f"Unhandled exception: {exc}")
+    traceback.print_exc()
+
+    # Возвращаем стандартный ответ об ошибке с сообщением и статусом 500
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
+
+
+# Добавление обработчиков ошибок для конкретных исключений (например, валидация)
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    logging.error(f"HTTP exception occurred: {exc.detail}")
+
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+    )
