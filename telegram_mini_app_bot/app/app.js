@@ -1,13 +1,13 @@
 // Функция для входа пользователя
 function signInUser() {
-    const email = document.getElementById("email").value;
+    const tg_id = document.getElementById("tg_id").value;
 
     fetch(`${TUNNEL_URL}/sign_in`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ tg_id: tg_id })
     })
         .then(response => {
             if (!response.ok) {
