@@ -14,11 +14,14 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL не установлен. Проверьте файл .env.")
 
+# Настройка движка базы данных
 engine = create_async_engine(DATABASE_URL, echo=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
+# Создание экземпляра приложения FastAPI
 app = FastAPI()
 
+# Метаданные и таблицы
 metadata = MetaData()
 
 # Таблица пользователей
@@ -83,3 +86,8 @@ async def sign_in_user(sign_in_data: SignInData):
                 raise HTTPException(status_code=404, detail="User not found")
 
             return {"tg_id": user.tg_id, "role": user.role}
+
+# Проверочный эндпоинт для корневого пути
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
