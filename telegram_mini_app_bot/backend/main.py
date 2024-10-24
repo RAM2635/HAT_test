@@ -1,6 +1,9 @@
 # backend/main.py
 
 import os
+import traceback
+
+from fastapi.responses import JSONResponse
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -9,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 # Загрузка переменных окружения из .env файла
 load_dotenv()
@@ -26,6 +30,15 @@ engine = create_async_engine(DATABASE_URL, echo=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Укажите здесь список доменов, которым разрешён доступ
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Подключение статических файлов
 app.mount("/static", StaticFiles(directory="telegram_mini_app_bot/app"), name="static")
@@ -103,8 +116,8 @@ async def sign_in_user(sign_in_data: SignInData):
                 return {"tg_id": user.tg_id, "role": user.role}
     except Exception as e:
         print(f"An error occurred: {e}")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal server error")
-
 
 # Маршруты для HTML-страниц
 @app.get("/login")
@@ -127,3 +140,16 @@ async def co_builder(request: Request):
 async def founder(request: Request):
     return templates.TemplateResponse("founder.html", {"request": request})
 
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"Unhandled exception: {exc}")
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
