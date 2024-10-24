@@ -1,12 +1,12 @@
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData
 from dotenv import load_dotenv
 
-# Загрузка переменных окружения из файла .env
+# Загрузка переменных окружения из .env файла
 load_dotenv()
 
 # Подключение к базе данных через SQLAlchemy
@@ -14,14 +14,11 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL не установлен. Проверьте файл .env.")
 
-# Настройка движка базы данных
 engine = create_async_engine(DATABASE_URL, echo=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
-# Создание экземпляра приложения FastAPI
 app = FastAPI()
 
-# Метаданные и таблицы
 metadata = MetaData()
 
 # Таблица пользователей
@@ -37,6 +34,7 @@ users_table = Table(
     Column("startup", String)
 )
 
+
 # Модель данных для регистрации пользователя
 class User(BaseModel):
     tg_id: int
@@ -45,9 +43,11 @@ class User(BaseModel):
     last_name: str
     role: str
 
+
 # Модель данных для входа по tg_id
 class SignInData(BaseModel):
     tg_id: int
+
 
 # Эндпоинт для регистрации нового пользователя
 @app.post("/register")
@@ -72,12 +72,12 @@ async def register_user(user: User):
 
     return {"message": "Registration successful", "user": user.first_name}
 
+
 # Эндпоинт для входа пользователя по tg_id
 @app.post("/sign_in")
 async def sign_in_user(sign_in_data: SignInData):
     async with async_session() as session:
         async with session.begin():
-            # Проверка пользователя по tg_id
             query = users_table.select().where(users_table.c.tg_id == sign_in_data.tg_id)
             result = await session.execute(query)
             user = result.fetchone()
@@ -87,7 +87,3 @@ async def sign_in_user(sign_in_data: SignInData):
 
             return {"tg_id": user.tg_id, "role": user.role}
 
-# Проверочный эндпоинт для корневого пути
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
