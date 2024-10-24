@@ -1,22 +1,30 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="telegram_mini_app_bot/app/styles.css">
     <title>Welcome to HAT</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
 <div class="container">
     <h1>Welcome to HAT</h1>
-    <p>If you are a co-builder, your journey to join innovative startups begins here. Whether you're a developer, marketer, designer, or strategist, our platform connects you with exciting projects tailored to your expertise. Let’s get started and find your next big challenge.</p>
-    <p>If you are a founder, your path to your own startup starts here. If you have an idea for your own startup, regardless of the stage of implementation, our platform will help bring it to life. Start your path to success now!</p>
+    <p>If you are a co-builder, your journey to join innovative startups begins here. Whether you're a developer,
+        marketer, designer, or strategist, our platform connects you with exciting projects tailored to your expertise.
+        Let’s get started and find your next big challenge.</p>
+    <p>If you are a founder, your path to your own startup starts here. If you have an idea for your own startup,
+        regardless of the stage of implementation, our platform will help bring it to life. Start your path to success
+        now!</p>
 
     <div class="button-group">
-        <button onclick="location.href='login.html'">Sign in</button>
-        <button onclick="location.href='registration.html'">Registration</button>
+        <button onclick="location.href='/login'">Sign in</button>
+        <button onclick="location.href='/registration'">Registration</button>
     </div>
 </div>
-<script src="telegram_mini_app_bot/app/app.js"></script>
+<script>
+    const TUNNEL_URL = "{{ TUNNEL_URL }}";
+</script>
+<script src="/static/app.js"></script>
 </body>
 </html>

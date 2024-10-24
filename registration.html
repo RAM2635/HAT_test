@@ -1,33 +1,38 @@
+<!-- templates/registration.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="telegram_mini_app_bot/app/styles.css">
     <title>Registration</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+<div class="header">
+    <h1>Welcome to HAT</h1>
+</div>
 <div class="container">
-    <h1>Registration</h1>
+    <h2>Create Your Account</h2>
     <form id="registration-form">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
         </div>
 
         <div class="form-group">
-            <label for="first-name">First Name:</label>
-            <input type="text" id="first-name" name="first_name" required>
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first_name" placeholder="Enter your first name" required>
         </div>
 
         <div class="form-group">
-            <label for="last-name">Last Name:</label>
-            <input type="text" id="last-name" name="last_name" required>
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last_name" placeholder="Enter your last name" required>
         </div>
 
         <div class="form-group">
-            <label for="role">Role on the platform:</label>
+            <label for="role">Role on the Platform</label>
             <select id="role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
                 <option value="co_builder">Co-builder</option>
                 <option value="founder">Founder</option>
             </select>
@@ -35,7 +40,11 @@
 
         <button type="button" onclick="registerUser()">Register</button>
     </form>
+    <p class="alternate-option">Already have an account? <a href="/login">Sign In</a></p>
 </div>
-<script src="telegram_mini_app_bot/app/app.js"></script>
+<script>
+    const TUNNEL_URL = "{{ TUNNEL_URL }}";
+</script>
+<script src="/static/app.js"></script>
 </body>
 </html>

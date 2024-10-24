@@ -1,49 +1,111 @@
+/* telegram_mini_app_bot/app/styles.css */
+
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f7f9fc;
-    color: #333;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+}
+
+.header {
+    background-color: #273c75;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.header h1 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 28px;
 }
 
 .container {
     background-color: #ffffff;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    width: 100%;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 40px auto;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+}
+
+.container h2 {
+    font-size: 24px;
+    color: #273c75;
+    margin-bottom: 30px;
     text-align: center;
 }
 
-h1 {
-    font-size: 28px;
-    color: #007bff;
-    margin-bottom: 30px;
+.form-group {
+    margin-bottom: 20px;
 }
 
-p {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 20px;
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #718093;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dcdde1;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #2f3640;
+    background-color: #f9f9f9;
+}
+
+.form-group input::placeholder {
+    color: #a0a0a0;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #273c75;
+    outline: none;
+    background-color: #ffffff;
 }
 
 button {
     width: 100%;
     padding: 15px;
-    background-color: #007bff;
-    color: white;
+    background-color: #273c75;
+    color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 18px;
-    margin-top: 20px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #192a56;
+}
+
+.telegram-button {
+    background-color: #0088cc;
+    margin-top: 30px;
+}
+
+.telegram-button:hover {
+    background-color: #006f9a;
+}
+
+.alternate-option {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.alternate-option a {
+    color: #273c75;
+    text-decoration: none;
+}
+
+.alternate-option a:hover {
+    text-decoration: underline;
 }
