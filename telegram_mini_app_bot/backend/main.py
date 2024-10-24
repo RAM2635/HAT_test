@@ -52,23 +52,23 @@ class SignInData(BaseModel):
 # Эндпоинт для регистрации нового пользователя
 @app.post("/register")
 async def register_user(user: User):
-    async with async_session() as session:
-        async with session.begin():
-            # Проверка, зарегистрирован ли пользователь по tg_id
-            existing_user = await session.execute(users_table.select().where(users_table.c.tg_id == user.tg_id))
-            if existing_user.scalar():
-                raise HTTPException(status_code=400, detail="User with this tg_id is already registered")
-
-            # Вставка нового пользователя
-            new_user = users_table.insert().values(
-                tg_id=user.tg_id,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                email=user.email,
-                role=user.role
-            )
-            await session.execute(new_user)
-            await session.commit()
+    # async with async_session() as session:
+    #     async with session.begin():
+    #         # Проверка, зарегистрирован ли пользователь по tg_id
+    #         existing_user = await session.execute(users_table.select().where(users_table.c.tg_id == user.tg_id))
+    #         if existing_user.scalar():
+    #             raise HTTPException(status_code=400, detail="User with this tg_id is already registered")
+    #
+    #         # Вставка нового пользователя
+    #         new_user = users_table.insert().values(
+    #             tg_id=user.tg_id,
+    #             first_name=user.first_name,
+    #             last_name=user.last_name,
+    #             email=user.email,
+    #             role=user.role
+    #         )
+    #         await session.execute(new_user)
+    #         await session.commit()
 
     return {"message": "Registration successful", "user": user.first_name}
 
