@@ -23,7 +23,7 @@ async function signInUser() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({tg_id: tg_id})
+            body: JSON.stringify({ tg_id })
         });
 
         console.log("Response status:", response.status);
@@ -37,13 +37,7 @@ async function signInUser() {
         alert("Sign in successful!");
 
         // Redirect based on user role
-        if (data.role === "co_builder") {
-            location.href = "/co_builder";
-        } else if (data.role === "founder") {
-            location.href = "/founder";
-        } else {
-            alert("Role not found");
-        }
+        redirectUser(data.role);
     } catch (error) {
         console.error("Error:", error);
         alert(`An error occurred: ${error.message}`);
@@ -86,11 +80,11 @@ async function registerUser() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                tg_id: tg_id,
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                role: role
+                tg_id,
+                first_name,
+                last_name,
+                email,
+                role
             })
         });
 
@@ -104,16 +98,25 @@ async function registerUser() {
         alert("Registration successful!");
 
         // Redirect based on user role
-        if (role === "co_builder") {
-            location.href = "/co_builder";
-        } else if (role === "founder") {
-            location.href = "/founder";
-        } else {
-            alert("Role not found");
-        }
+        redirectUser(role);
     } catch (error) {
         console.error("Error:", error);
         alert(`An error occurred: ${error.message}`);
+    }
+}
+
+// Function to redirect users based on their role
+function redirectUser(role) {
+    switch (role) {
+        case "co_builder":
+            location.href = "/co_builder";
+            break;
+        case "founder":
+            location.href = "/founder";
+            break;
+        default:
+            alert("Role not found");
+            break;
     }
 }
 

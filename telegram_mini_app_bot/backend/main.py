@@ -3,10 +3,10 @@ import traceback
 import logging
 
 from fastapi.responses import JSONResponse
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, BigInteger, String, Table, MetaData, select
@@ -62,17 +62,20 @@ users_table = Table(
     schema="public"
 )
 
+
 # Модель данных для регистрации пользователя
 class User(BaseModel):
     tg_id: int
-    email: str
+    email: EmailStr  # Используем EmailStr для валидации email адреса
     first_name: str
     last_name: str
     role: str
 
+
 # Модель данных для входа по tg_id
 class SignInData(BaseModel):
     tg_id: int
+
 
 # Эндпоинт для регистрации нового пользователя
 @app.post("/register")
@@ -101,10 +104,12 @@ async def register_user(user: User):
 
     return {"message": "Registration successful", "user": user.first_name}
 
+
 # Эндпоинт для входа пользователя по tg_id
 @app.post("/sign_in")
 async def sign_in_user(sign_in_data: SignInData):
     logging.info(f"Received sign_in request with tg_id: {sign_in_data.tg_id}")
+
     try:
         async with async_session() as session:
             async with session.begin():
@@ -124,36 +129,56 @@ async def sign_in_user(sign_in_data: SignInData):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 # Маршруты для HTML-страниц
 @app.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
 
+
 @app.get("/registration")
 async def registration(request: Request):
     return templates.TemplateResponse("registration.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
+
 
 @app.get("/")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "TUNNEL_URL": TUNNEL_URL})
 
+
 @app.get("/co_builder")
 async def co_builder(request: Request):
     return templates.TemplateResponse("co_builder.html", {"request": request})
+
 
 @app.get("/founder")
 async def founder(request: Request):
     return templates.TemplateResponse("founder.html", {"request": request})
 
+
 @app.get("/ping")
 async def ping():
     return {"message": "pong"}
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     logging.error(f"Unhandled exception: {exc}")
     traceback.print_exc()
+
+    # Возвращаем стандартный ответ об ошибке с сообщением и статусом 500
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"},
+    )
+
+
+# Добавление обработчиков ошибок для конкретных исключений (например, валидация)
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    logging.error(f"HTTP exception occurred: {exc.detail}")
+
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
     )
